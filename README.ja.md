@@ -50,12 +50,8 @@ Issues and pull requests are welcome.
 
 Bug reports, feature requests, and improvements are appreciated.
 
-## Roadmap
+## 実装する予定の機能
 
-- [ ] Windows installer
-- [ ] Start Menu shortcut and startup registration
-- [ ] Uninstaller
-- [ ] GitHub Releases
 - [ ] Automated builds with GitHub Actions
 - [ ] Migration to C# / .NET
 - [ ] Windows ARM64 support
