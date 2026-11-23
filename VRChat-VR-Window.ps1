@@ -1,4 +1,4 @@
-
+﻿
 # VRChat Window Control
 # Windows PowerShell 5.1
 
@@ -25,9 +25,42 @@ public static class VRChatWindowNative
 }
 
 # Configuration
-$script:ConfigPath = Join-Path $PSScriptRoot "settings.json"
+$script:ConfigDirectory = Join-Path $env:APPDATA "VRChatWindowControl"
+$script:ConfigPath = Join-Path $script:ConfigDirectory "settings.json"
+$script:LegacyConfigPath = Join-Path $PSScriptRoot "settings.json"
 $script:WindowWidth = 400
 $script:WindowHeight = 300
+
+# Create the per-user configuration directory
+try {
+    if (-not (Test-Path $script:ConfigDirectory)) {
+        New-Item -ItemType Directory -Path $script:ConfigDirectory -Force |
+            Out-Null
+    }
+}
+catch {
+    [System.Windows.Forms.MessageBox]::Show(
+        "Could not create the settings folder: $($_.Exception.Message)",
+        "VRChat Window Control"
+    ) | Out-Null
+    throw
+}
+
+# Migrate settings from the previous application folder, if necessary
+if (
+    -not (Test-Path $script:ConfigPath) -and
+    (Test-Path $script:LegacyConfigPath)
+) {
+    try {
+        Copy-Item -Path $script:LegacyConfigPath -Destination $script:ConfigPath
+    }
+    catch {
+        [System.Windows.Forms.MessageBox]::Show(
+            "Could not migrate the existing settings. Default values will be used. Details: $($_.Exception.Message)",
+            "VRChat Window Control"
+        ) | Out-Null
+    }
+}
 
 # Load saved settings
 if (Test-Path $script:ConfigPath) {
