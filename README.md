@@ -54,12 +54,8 @@ Issues and pull requests are welcome.
 
 Bug reports, feature requests, and improvements are appreciated.
 
-## Roadmap
+## Planned features
 
-- [ ] Windows installer
-- [ ] Start Menu shortcut and startup registration
-- [ ] Uninstaller
-- [ ] GitHub Releases
 - [ ] Automated builds with GitHub Actions
 - [ ] Migration to C# / .NET
 - [ ] Windows ARM64 support
