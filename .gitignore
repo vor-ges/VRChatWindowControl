@@ -1,0 +1,12 @@
+# Inno Setup build output
+/Installer/output/
+
+# Inno Setup backup files
+*.iss~
+
+# Windows Explorer metadata
+Thumbs.db
+Desktop.ini
+
+# macOS metadata
+.DS_Store
