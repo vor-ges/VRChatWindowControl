@@ -1,0 +1,56 @@
+name: Build Windows Installer
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Installer/**'
+      - 'VRChat-VR-Window.ps1'
+      - 'Start-VRChatWindowHelper.vbs'
+      - '.github/workflows/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Install Inno Setup
+        run: choco install innosetup --yes --no-progress
+        shell: pwsh
+
+      - name: Build installer
+        shell: pwsh
+        run: |
+          $roots = @(
+            $env:ProgramFiles
+            ${env:ProgramFiles(x86)}
+          ) | Where-Object { $_ -and (Test-Path $_) }
+
+          $compiler = Get-ChildItem -Path $roots -Filter ISCC.exe -Recurse -ErrorAction SilentlyContinue |
+            Select-Object -First 1
+
+          if (-not $compiler) {
+            throw "Inno Setup compiler (ISCC.exe) was not found."
+          }
+
+          & $compiler.FullName "Installer/VRChatWindowControl.iss"
+
+          if ($LASTEXITCODE -ne 0) {
+            exit $LASTEXITCODE
+          }
+
+      - name: Upload installer
+        uses: actions/upload-artifact@v4
+        with:
+          name: VRChatWindowControl-Setup
+          path: Installer/output/VRChatWindowControl-Setup-*.exe
+          if-no-files-found: error
+          retention-days: 14
