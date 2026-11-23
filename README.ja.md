@@ -50,7 +50,7 @@ Issues and pull requests are welcome.
 
 Bug reports, feature requests, and improvements are appreciated.
 
-## 実装する予定の機能
+## Planned features
 
 - [ ] Automated builds with GitHub Actions
 - [ ] Migration to C# / .NET
