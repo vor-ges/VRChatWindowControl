@@ -125,6 +125,3 @@ Bug reports, feature requests, and improvements are appreciated.
 
 
 This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
-
-
-
