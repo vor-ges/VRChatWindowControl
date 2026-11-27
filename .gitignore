@@ -1,6 +1,11 @@
 # Inno Setup build output
 /Installer/output/
 
+# .NET build output
+/bin/
+/obj/
+/publish/
+
 # Inno Setup backup files
 *.iss~
 

@@ -18,7 +18,7 @@ OutputBaseFilename=VRChatWindowControl-Setup-{#MyAppVersion}
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
-UninstallDisplayIcon={app}\VRChat-VR-Window.ps1
+UninstallDisplayIcon={app}\VRChatWindowControl.exe
 ArchitecturesInstallIn64BitMode=x64compatible
 
 [Languages]
@@ -41,13 +41,12 @@ Name: "desktopicon"; Description: "{cm:DesktopTask}"; GroupDescription: "{cm:Add
 Name: "startmenuicon"; Description: "{cm:StartMenuTask}"; GroupDescription: "{cm:AdditionalTasks}"; Flags: unchecked
 
 [Files]
-Source: "..\VRChat-VR-Window.ps1"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\Start-VRChatWindowHelper.vbs"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
-Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\Start-VRChatWindowHelper.vbs"; Tasks: startmenuicon
-Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\Start-VRChatWindowHelper.vbs"; Tasks: desktopicon
-Name: "{autostartup}\{#MyAppName}"; Filename: "{app}\Start-VRChatWindowHelper.vbs"; Tasks: startup
+Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\VRChatWindowControl.exe"; Tasks: startmenuicon
+Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\VRChatWindowControl.exe"; Tasks: desktopicon
+Name: "{autostartup}\{#MyAppName}"; Filename: "{app}\VRChatWindowControl.exe"; Tasks: startup
 
 [UninstallDelete]
 ; Keep per-user settings in %APPDATA% so uninstalling does not erase preferences.
