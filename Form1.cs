@@ -13,13 +13,11 @@ public partial class Form1 : Form
 
     private AppSettings settings;
 
-    // --tray で起動された場合は、最初のウィンドウ表示を抑止する
-    private readonly bool startInTray;
-    private bool initialVisibilityHandled;
+    // 起動時のウィンドウ表示を一度だけ抑止する
+	private bool initialVisibilityHandled;
 
-    public Form1(bool startInTray = false)
-    {
-        MessageBox.Show($"startInTray = {startInTray}");
+    public Form1()
+	{
 
         InitializeComponent();
 
@@ -81,7 +79,7 @@ public partial class Form1 : Form
         resumeItem.Enabled = false;
 
         trayIcon.ContextMenuStrip = trayMenu;
-        trayIcon.DoubleClick += (_, _) => ShowWindow();
+        trayIcon.DoubleClick += (_, _) => ShowSettings();
 
         // ×ボタンで終了せず、非表示にする
         FormClosing += (_, e) =>
@@ -107,17 +105,17 @@ public partial class Form1 : Form
         monitor.Start();
     }
 
-    // スタートアップ起動時は、最初のウィンドウ表示を抑止する
-    protected override void SetVisibleCore(bool value)
-    {
-        if (value && startInTray && !initialVisibilityHandled)
-        {
-            initialVisibilityHandled = true;
-            value = false;
-        }
+    // 起動時はメインウィンドウを表示せず、タスクトレイに常駐する
+	protected override void SetVisibleCore(bool value)
+	{
+		if (value && !initialVisibilityHandled)
+		{
+			initialVisibilityHandled = true;
+			value = false;
+		}
 
-        base.SetVisibleCore(value);
-    }
+		base.SetVisibleCore(value);
+	}
 
     // 設定画面を開く
     private void ShowSettings()
@@ -153,13 +151,5 @@ public partial class Form1 : Form
                 );
             }
         }
-    }
-
-    // メインウィンドウを表示
-    private void ShowWindow()
-    {
-        Show();
-        WindowState = FormWindowState.Normal;
-        Activate();
     }
 }
