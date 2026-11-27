@@ -13,9 +13,6 @@ public partial class Form1 : Form
 
     private AppSettings settings;
 
-    // 起動時のウィンドウ表示を一度だけ抑止する
-	private bool initialVisibilityHandled;
-
     public Form1()
 	{
 
@@ -108,13 +105,13 @@ public partial class Form1 : Form
     // 起動時はメインウィンドウを表示せず、タスクトレイに常駐する
 	protected override void SetVisibleCore(bool value)
 	{
-		if (value && !initialVisibilityHandled)
-		{
-			initialVisibilityHandled = true;
-			value = false;
-		}
+    	if (!IsHandleCreated && value)
+    	{
+        	value = false;
+        	CreateHandle();
+    	}
 
-		base.SetVisibleCore(value);
+    	base.SetVisibleCore(value);
 	}
 
     // 設定画面を開く
