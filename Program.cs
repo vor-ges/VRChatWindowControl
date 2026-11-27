@@ -1,8 +1,12 @@
 namespace VRChatWindowControl;
 
-static void Main(string[] args)
+internal static class Program
 {
-    ApplicationConfiguration.Initialize();
+    [STAThread]
+    private static void Main(string[] args)
+    {
+        ApplicationConfiguration.Initialize();
 
-    Application.Run(new Form1());
+        Application.Run(new Form1());
+    }
 }
