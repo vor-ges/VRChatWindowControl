@@ -1,5 +1,5 @@
 #define MyAppName "VRChat Window Control"
-#define MyAppVersion "1.1.0"
+#define MyAppVersion "1.1.1"
 #define MyAppPublisher "vor-ges"
 
 [Setup]
@@ -46,7 +46,7 @@ Source: "..\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs cr
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\VRChatWindowControl.exe"; Tasks: startmenuicon
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\VRChatWindowControl.exe"; Tasks: desktopicon
-Name: "{autostartup}\{#MyAppName}"; Filename: "{app}\VRChatWindowControl.exe"; Tasks: startup
+Name: "{autostartup}\{#MyAppName}"; Filename: "{app}\VRChatWindowControl.exe"; Parameters: "--tray"; Tasks: startup
 
 [UninstallDelete]
 ; Keep per-user settings in %APPDATA% so uninstalling does not erase preferences.

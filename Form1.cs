@@ -13,8 +13,14 @@ public partial class Form1 : Form
 
     private AppSettings settings;
 
-    public Form1()
+    // --tray で起動された場合は、最初のウィンドウ表示を抑止する
+    private readonly bool startInTray;
+    private bool initialVisibilityHandled;
+
+    public Form1(bool startInTray = false)
     {
+        this.startInTray = startInTray;
+
         InitializeComponent();
 
         // 設定を読み込む
@@ -32,8 +38,8 @@ public partial class Form1 : Form
         {
             Text = "VRChat Window Control",
             Icon = new Icon(
-				Path.Combine(AppContext.BaseDirectory, "app.ico")
-				),
+                Path.Combine(AppContext.BaseDirectory, "app.ico")
+            ),
             Visible = true
         };
 
@@ -99,6 +105,18 @@ public partial class Form1 : Form
 
         // 監視開始
         monitor.Start();
+    }
+
+    // スタートアップ起動時は、最初のウィンドウ表示を抑止する
+    protected override void SetVisibleCore(bool value)
+    {
+        if (value && startInTray && !initialVisibilityHandled)
+        {
+            initialVisibilityHandled = true;
+            value = false;
+        }
+
+        base.SetVisibleCore(value);
     }
 
     // 設定画面を開く
