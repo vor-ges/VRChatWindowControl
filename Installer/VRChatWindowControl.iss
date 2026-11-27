@@ -1,5 +1,5 @@
 #define MyAppName "VRChat Window Control"
-#define MyAppVersion "1.1.3"
+#define MyAppVersion "1.2.0"
 #define MyAppPublisher "vor-ges"
 
 [Setup]
@@ -20,6 +20,8 @@ SolidCompression=yes
 WizardStyle=modern
 UninstallDisplayIcon={app}\VRChatWindowControl.exe
 ArchitecturesInstallIn64BitMode=x64compatible
+CloseApplications=yes
+RestartApplications=no
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
@@ -47,6 +49,9 @@ Source: "..\publish\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs cr
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\VRChatWindowControl.exe"; Tasks: startmenuicon
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\VRChatWindowControl.exe"; Tasks: desktopicon
 Name: "{autostartup}\{#MyAppName}"; Filename: "{app}\VRChatWindowControl.exe"; Tasks: startup
+
+[Run]
+Filename: "{app}\VRChatWindowControl.exe"; WorkingDir: "{app}"; Flags: nowait runhidden
 
 [UninstallDelete]
 ; Keep per-user settings in %APPDATA% so uninstalling does not erase preferences.

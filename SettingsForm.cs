@@ -8,6 +8,12 @@ internal sealed class SettingsForm : Form
 {
     private readonly NumericUpDown widthInput;
     private readonly NumericUpDown heightInput;
+    private readonly ComboBox languageInput;
+    private readonly Label widthLabel;
+    private readonly Label heightLabel;
+    private readonly Label languageLabel;
+    private readonly Button saveButton;
+    private readonly Button cancelButton;
 
     public AppSettings Settings { get; private set; }
 
@@ -16,20 +22,19 @@ internal sealed class SettingsForm : Form
         Settings = new AppSettings
         {
             Width = currentSettings.Width,
-            Height = currentSettings.Height
+            Height = currentSettings.Height,
+            Language = AppLanguage.NormalizeCode(currentSettings.Language)
         };
 
-        Text = "VRChat Window Control - Settings";
-        Size = new Size(340, 220);
+        Size = new Size(390, 285);
         StartPosition = FormStartPosition.CenterScreen;
         FormBorderStyle = FormBorderStyle.FixedDialog;
         MaximizeBox = false;
         MinimizeBox = false;
         ShowInTaskbar = false;
 
-        var widthLabel = new Label
+        widthLabel = new Label
         {
-            Text = "Width (px)",
             Location = new Point(20, 25),
             Size = new Size(110, 25)
         };
@@ -37,15 +42,14 @@ internal sealed class SettingsForm : Form
         widthInput = new NumericUpDown
         {
             Location = new Point(145, 22),
-            Size = new Size(150, 25),
+            Size = new Size(200, 25),
             Minimum = 100,
             Maximum = 7680,
             Value = currentSettings.Width
         };
 
-        var heightLabel = new Label
+        heightLabel = new Label
         {
-            Text = "Height (px)",
             Location = new Point(20, 65),
             Size = new Size(110, 25)
         };
@@ -53,25 +57,40 @@ internal sealed class SettingsForm : Form
         heightInput = new NumericUpDown
         {
             Location = new Point(145, 62),
-            Size = new Size(150, 25),
+            Size = new Size(200, 25),
             Minimum = 100,
             Maximum = 4320,
             Value = currentSettings.Height
         };
 
-        var saveButton = new Button
+        languageLabel = new Label
         {
-            Text = "Save",
-            Location = new Point(125, 120),
-            Size = new Size(80, 30),
+            Location = new Point(20, 105),
+            Size = new Size(110, 25)
+        };
+
+        languageInput = new ComboBox
+        {
+            Location = new Point(145, 102),
+            Size = new Size(200, 25),
+            DropDownStyle = ComboBoxStyle.DropDownList,
+            DataSource = AppLanguage.Options.ToArray(),
+            DisplayMember = nameof(LanguageOption.DisplayName),
+            ValueMember = nameof(LanguageOption.Code),
+            SelectedValue = Settings.Language
+        };
+
+        saveButton = new Button
+        {
+            Location = new Point(155, 160),
+            Size = new Size(90, 30),
             DialogResult = DialogResult.OK
         };
 
-        var cancelButton = new Button
+        cancelButton = new Button
         {
-            Text = "Cancel",
-            Location = new Point(215, 120),
-            Size = new Size(80, 30),
+            Location = new Point(255, 160),
+            Size = new Size(90, 30),
             DialogResult = DialogResult.Cancel
         };
 
@@ -79,6 +98,12 @@ internal sealed class SettingsForm : Form
         {
             Settings.Width = (int)widthInput.Value;
             Settings.Height = (int)heightInput.Value;
+            Settings.Language = SelectedLanguage;
+        };
+
+        languageInput.SelectedValueChanged += (_, _) =>
+        {
+            ApplyLanguage(AppLanguage.GetText(SelectedLanguage));
         };
 
         Controls.AddRange(new Control[]
@@ -87,11 +112,28 @@ internal sealed class SettingsForm : Form
             widthInput,
             heightLabel,
             heightInput,
+            languageLabel,
+            languageInput,
             saveButton,
             cancelButton
         });
 
+        ApplyLanguage(AppLanguage.GetText(Settings.Language));
+
         AcceptButton = saveButton;
         CancelButton = cancelButton;
+    }
+
+    private string SelectedLanguage =>
+        AppLanguage.NormalizeCode(languageInput.SelectedValue as string);
+
+    private void ApplyLanguage(AppLanguageText text)
+    {
+        Text = text.SettingsTitle;
+        widthLabel.Text = text.WidthLabel;
+        heightLabel.Text = text.HeightLabel;
+        languageLabel.Text = text.LanguageLabel;
+        saveButton.Text = text.SaveButton;
+        cancelButton.Text = text.CancelButton;
     }
 }

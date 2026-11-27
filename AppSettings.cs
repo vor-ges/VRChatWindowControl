@@ -7,4 +7,7 @@ internal sealed class AppSettings
 
     // ウィンドウの高さ
     public int Height { get; set; } = 300;
+
+    // ツールの表示言語
+    public string Language { get; set; } = AppLanguage.DefaultCode;
 }

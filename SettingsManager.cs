@@ -67,6 +67,8 @@ internal static class SettingsManager
                 settings.Height = 300;
             }
 
+            settings.Language = AppLanguage.NormalizeCode(settings.Language);
+
             return settings;
         }
         catch

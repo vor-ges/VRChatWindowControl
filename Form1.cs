@@ -8,6 +8,8 @@ public partial class Form1 : Form
 
     private readonly ToolStripMenuItem pauseItem;
     private readonly ToolStripMenuItem resumeItem;
+    private readonly ToolStripMenuItem settingsItem;
+    private readonly ToolStripMenuItem exitItem;
 
     private readonly VRChatMonitor monitor;
 
@@ -41,10 +43,12 @@ public partial class Form1 : Form
         // タスクトレイメニュー
         trayMenu = new ContextMenuStrip();
 
-        trayMenu.Items.Add("設定", null, (_, _) =>
+        settingsItem = new ToolStripMenuItem();
+        settingsItem.Click += (_, _) =>
         {
             ShowSettings();
-        });
+        };
+        trayMenu.Items.Add(settingsItem);
 
         pauseItem = new ToolStripMenuItem("一時停止");
         resumeItem = new ToolStripMenuItem("再開");
@@ -68,15 +72,18 @@ public partial class Form1 : Form
 
         trayMenu.Items.Add(new ToolStripSeparator());
 
-        trayMenu.Items.Add("終了", null, (_, _) =>
+        exitItem = new ToolStripMenuItem();
+        exitItem.Click += (_, _) =>
         {
             Application.Exit();
-        });
+        };
+        trayMenu.Items.Add(exitItem);
 
         resumeItem.Enabled = false;
 
         trayIcon.ContextMenuStrip = trayMenu;
         trayIcon.DoubleClick += (_, _) => ShowSettings();
+        ApplyLanguage();
 
         // ×ボタンで終了せず、非表示にする
         FormClosing += (_, e) =>
@@ -127,12 +134,15 @@ public partial class Form1 : Form
 
                 settings = dialog.Settings;
 
+                ApplyLanguage();
+
                 // 監視処理にも新しいサイズを反映
                 monitor.WindowWidth = settings.Width;
                 monitor.WindowHeight = settings.Height;
 
+                AppLanguageText text = AppLanguage.GetText(settings.Language);
                 MessageBox.Show(
-                    "Settings saved successfully.",
+                    text.SaveSuccess,
                     "VRChat Window Control",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information
@@ -140,13 +150,23 @@ public partial class Form1 : Form
             }
             catch (Exception ex)
             {
+                AppLanguageText text = AppLanguage.GetText(dialog.Settings.Language);
                 MessageBox.Show(
-                    $"Could not save settings:\n{ex.Message}",
+                    text.SaveErrorPrefix + ex.Message,
                     "VRChat Window Control",
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Error
                 );
             }
         }
+    }
+
+    private void ApplyLanguage()
+    {
+        AppLanguageText text = AppLanguage.GetText(settings.Language);
+        settingsItem.Text = text.TraySettings;
+        pauseItem.Text = text.TrayPause;
+        resumeItem.Text = text.TrayResume;
+        exitItem.Text = text.TrayExit;
     }
 }
