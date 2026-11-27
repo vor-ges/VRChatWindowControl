@@ -1,5 +1,5 @@
 #define MyAppName "VRChat Window Control"
-#define MyAppVersion "0.1.0"
+#define MyAppVersion "1.1.0"
 #define MyAppPublisher "vor-ges"
 
 [Setup]
